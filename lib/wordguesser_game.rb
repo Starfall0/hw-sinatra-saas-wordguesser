@@ -1,5 +1,6 @@
-class WordGuesserGame
+# frozen_string_literal: true
 
+class WordGuesserGame
   # add the necessary class methods, attributes, etc. here
   # to make the tests in spec/wordguesser_game_spec.rb pass.
 
@@ -13,11 +14,10 @@ class WordGuesserGame
   end
 
   def guess(letter)
-    if letter.nil? || letter !~ /\A[a-zA-Z]\Z/i # match single letter,ignoring case
-      raise ArgumentError
-    end
+    raise ArgumentError if letter.nil? || letter !~ /\A[a-zA-Z]\Z/i # match single letter,ignoring case
+
     letter = letter[0].downcase
-    if  @word.include?(letter) && !@guesses.include?(letter)
+    if @word.include?(letter) && !@guesses.include?(letter)
       @guesses += letter
     elsif !@word.include?(letter) && !@wrong_guesses.include?(letter)
       @wrong_guesses += letter
@@ -37,6 +37,7 @@ class WordGuesserGame
   def check_win_or_lose
     return :win if word_with_guesses == @word
     return :lose if @wrong_guesses.length >= 7
+
     :play
   end
 
@@ -48,9 +49,8 @@ class WordGuesserGame
     require 'uri'
     require 'net/http'
     uri = URI('http://randomword.saasbook.info/RandomWord')
-    Net::HTTP.new('randomword.saasbook.info').start { |http|
-      return http.post(uri, "").body
-    }
+    Net::HTTP.new('randomword.saasbook.info').start do |http|
+      return http.post(uri, '').body
+    end
   end
-
 end
